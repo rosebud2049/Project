@@ -22,8 +22,8 @@
         <button @click="getUser()" class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
       </form>
     </nav>
-    <table class="table">
-      <thead class="thead-dark">
+    <table class="table table-striped">
+      <thead class="thead-info">
         <tr>
           <th scope="col">id</th>
           <th scope="col">username</th>

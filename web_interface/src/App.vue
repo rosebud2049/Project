@@ -1,17 +1,30 @@
 <template>
   <div id="app">
+    <nav id="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <router-link to="/">
+        <a href="#" class="navbar-brand text-white">Time Manager</a>
+      </router-link>
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <router-link to="/login">
+            <a href="#" class="nav-link">Login</a>
+          </router-link>
+        </li>
+        <li class="nav-item">
+          <router-link to="/register">
+            <a href="#" class="nav-link">Register</a>
+          </router-link>
+        </li>
+      </ul>
+    </nav>
     <div class="wrapper">
       <!-- Sidebar -->
       <nav id="sidebar">
-        <div class="sidebar-header">
-          <h3>Dashboard</h3>
-        </div>
-
         <ul class="list-unstyled components">
           <p>Raphaël Palerme</p>
           <li>
             <router-link to="/Users">
-            <a href="#">User</a>
+              <a href="#">User</a>
             </router-link>
           </li>
           <li class="active">
@@ -43,12 +56,9 @@
 </template>
 
 <script>
-
-
 export default {
   name: "app",
-  components: {
-  }
+  components: {}
 };
 </script>
 
