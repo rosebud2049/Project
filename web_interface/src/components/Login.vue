@@ -37,7 +37,17 @@
 </template>
 
 <script>
-export default {};
+export default {
+  props: [],
+  data() {
+    return {
+
+    }
+  },
+  methods: {
+
+  }
+};
 </script>
 
 <style scoped>

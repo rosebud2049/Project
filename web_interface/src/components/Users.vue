@@ -194,7 +194,7 @@ export default {
     },
     createUser: function() {
       axios
-        .post("http://localhost:4000/api/users", {
+        .post("http://localhost:4001/api/users", {
           user: {
             username: this.user.username,
             email: this.user.email
@@ -232,7 +232,7 @@ export default {
     },
     updateUser: function() {
       axios
-        .put("http://localhost:4000/api/users/" + this.user.userId, {
+        .put("http://localhost:4001/api/users/" + this.user.userId, {
           user: {
             username: this.user.username,
             email: this.user.email
@@ -271,7 +271,7 @@ export default {
     },
     getUsers: function() {
       axios
-        .get("http://localhost:4000/api/users")
+        .get("http://localhost:4001/api/users")
         .then(response => {
           this.users = response.data.data;
           // eslint-disable-next-line
@@ -285,7 +285,7 @@ export default {
     getUser: function() {
       console.log(this.search);
       axios
-        .get("http://localhost:4000/api/users?email=" + this.search)
+        .get("http://localhost:4001/api/users?email=" + this.search)
         .then(response => {
           console.log(response);
           this.users = response.data.data;
@@ -307,7 +307,7 @@ export default {
         if (result.value) {
           Swal.fire("Deleted!", "Your file has been deleted.", "success");
           axios
-            .delete("http://localhost:4000/api/users/" + id)
+            .delete("http://localhost:4001/api/users/" + id)
             .then(response => {
               this.users.splice(this.user.userIdx, 1);
               // eslint-disable-next-line

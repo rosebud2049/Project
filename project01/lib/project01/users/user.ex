@@ -5,6 +5,7 @@ defmodule Project01.Users.User do
   schema "users" do
     field :email, :string
     field :username, :string
+    field :password, :string
     has_many :workingtimes, Project01.Workingtimes.Workingtime
     has_many :clocks, Project01.Clocks.Clock
     
@@ -14,7 +15,17 @@ defmodule Project01.Users.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:username, :email])
-    |> validate_required([:username, :email])
+    |> cast(attrs, [:username, :email, :password])
+    |> validate_required([:username, :email, :password])
+    |> encrypt_password()
+  end
+
+  defp encrypt_password(changeset) do
+    case changeset do
+     %Ecto.Changeset{valid?: true, changes: %{password: pwd}} -> 
+     put_change(changeset, :password, Bcrypt.hash_pwd_salt(pwd))
+   _ ->
+     changeset
+    end
   end
 end
