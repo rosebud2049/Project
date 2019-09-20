@@ -6,6 +6,7 @@ defmodule Project01.Users.User do
     field :email, :string
     field :username, :string
     field :password, :string
+    field :role, :string
     has_many :workingtimes, Project01.Workingtimes.Workingtime
     has_many :clocks, Project01.Clocks.Clock
     
@@ -15,8 +16,8 @@ defmodule Project01.Users.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:username, :email, :password])
-    |> validate_required([:username, :email, :password])
+    |> cast(attrs, [:username, :email, :password, :role])
+    |> validate_required([:username, :email, :password, :role])
     |> encrypt_password()
   end
 

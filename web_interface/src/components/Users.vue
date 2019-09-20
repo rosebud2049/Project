@@ -98,6 +98,26 @@
                   class="form-control"
                 />
               </div>
+              <div class="form-group">
+                <label>Password</label>
+                <input
+                  v-model="user.password"
+                  id="modal-password-input"
+                  type="password"
+                  name="password"
+                  class="form-control"
+                />
+              </div>
+              <div class="form-group">
+                <label>Role</label>
+                <input
+                  v-model="user.role"
+                  id="modal-role-input"
+                  type="text"
+                  name="role"
+                  class="form-control"
+                />
+              </div>
             </form>
           </div>
           <div class="modal-footer">
@@ -146,6 +166,26 @@
                   class="form-control"
                 />
               </div>
+              <div class="form-group">
+                <label>Password</label>
+                <input
+                  v-model="user.password"
+                  id="modal-password-input1"
+                  type="password"
+                  name="password"
+                  class="form-control"
+                />
+              </div>
+              <div class="form-group">
+                <label>Role</label>
+                <input
+                  v-model="user.role"
+                  id="modal-role-input1"
+                  type="text"
+                  name="role"
+                  class="form-control"
+                />
+              </div>
             </form>
           </div>
           <div class="modal-footer">
@@ -173,7 +213,9 @@ export default {
     return {
       user: {
         username: "",
-        email: ""
+        email: "",
+        password: "",
+        role: ""
       },
       users: null,
       userId: "",
@@ -186,10 +228,14 @@ export default {
       this.user.userId = id;
       this.user.userIdx = idx;
       $("button").click(function() {
-        $("#modal-username-input1").val("");
-        $("#modal-email-input1").val("");
         $("#modal-username-input").val("");
         $("#modal-email-input").val("");
+        $("#modal-password-input").val("");
+        $("#modal-role-input").val("");
+        $("#modal-username-input1").val("");
+        $("#modal-email-input1").val("");
+        $("#modal-password-input1").val("");
+        $("#modal-role-input1").val("");
       });
     },
     createUser: function() {
@@ -197,7 +243,9 @@ export default {
         .post("http://localhost:4001/api/users", {
           user: {
             username: this.user.username,
-            email: this.user.email
+            email: this.user.email,
+            password: this.user.password,
+            role: this.user.role
           }
         })
         .then(response => {
@@ -215,10 +263,14 @@ export default {
           });
           $("#exampleModal").modal("hide");
           $("button").click(function() {
-            $("#modal-username-input1").val("");
-            $("#modal-email-input1").val("");
             $("#modal-username-input").val("");
             $("#modal-email-input").val("");
+            $("#modal-passsword-input").val("");
+            $("#modal-role-input").val("");
+            $("#modal-username-input1").val("");
+            $("#modal-email-input1").val("");
+            $("#modal-password-input1").val("");
+            $("#modal-role-input1").val("");
           });
           this.info = response;
           // eslint-disable-next-line
@@ -235,7 +287,9 @@ export default {
         .put("http://localhost:4001/api/users/" + this.user.userId, {
           user: {
             username: this.user.username,
-            email: this.user.email
+            email: this.user.email,
+            password: this.user.password,
+            role: this.user.role
           }
         })
         .then(response => {

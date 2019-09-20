@@ -40,18 +40,20 @@
                 placeholder="Password"
               />
             </div>
-            <!-- <label for="exampleInputPassword1">Role</label>
+            <label for="exampleInputPassword1">Role</label>
             <div class="input-group mb-3">
               <div class="input-group-prepend">
                 <label class="input-group-text" for="inputGroupSelect01">Options</label>
               </div>
-              <select class="custom-select" id="inputGroupSelect01" >
-                <option
+              <select v-model="user.role" class="custom-select" id="inputGroupSelect01" >
+                <option  
                   class="custom-select" id="inputGroupSelect01"
-                >{{ role.text }}</option>
+                  v-for="role in roles"
+                  v-bind:key="role.value"
+                >{{ role }}</option>
               </select>
-            </div> -->
-            <button type="submit" class="btn btn-info btn-block">Sign Up</button>
+            </div>
+            <button @click="register()" type="submit" class="btn btn-info btn-block">Sign Up</button>
           </form>
         </div>
       </div>
@@ -70,29 +72,21 @@ export default {
       user: {
         username: "",
         email: "",
-        password: ""
+        password: "", 
+        role: ""
       },
-      // idx: "",
-      // selected: "Choose...",
-      // roles: [
-      //   { text: "admin", value: "admin" },
-      //   { text: "user", value: "user" }
-      // ]
+      roles: ["admin", "user"]
     };
   },
   methods: {
-    // getIdx: function(idx) {
-    //   this.idx = idx
-    // },
     register: function(index) {
-      // console.log(this.roles[this.idx])
       axios
         .post("http://localhost:4001/api/users", {
           user: {
             username: this.user.username,
             email: this.user.email,
             password: this.user.password,
-            role: this.role
+            role: this.user.role
           }
         })
         .then(response => {
