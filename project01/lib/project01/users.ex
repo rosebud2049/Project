@@ -7,20 +7,56 @@ defmodule Project01.Users do
   alias Project01.Repo
 
   alias Project01.Users.User
+  alias Project01.Guardian
+  import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
 
+  
+  
+  
   @doc """
   Returns the list of users.
-
+  
   ## Examples
-
-      iex> list_users()
-      [%User{}, ...]
-
+  
+  iex> list_users()
+  [%User{}, ...]
+  
   """
+  def token_sign_in(email, password) do
+    case email_password_auth(email, password) do
+      {:ok, user} ->
+        Guardian.encode_and_sign(user)
+      _ ->
+        {:error, :unauthorized}
+    end
+  end
+  
   def list_users do
     Repo.all(User)
   end
+  
+  defp email_password_auth(email, password) when is_binary(email) and is_binary(password) do
+    with {:ok, user} <- get_by_email(email),
+    do: verify_password(password, user)
+  end
 
+  defp get_by_email(email) when is_binary(email) do
+    case Repo.get_by(User, email: email) do
+    nil ->
+      dummy_checkpw()
+      {:error, "Login error."}
+    user ->
+      {:ok, user}
+    end
+  end
+
+  defp verify_password(password, %User{} = user) when is_binary(password) do
+    if checkpw(password, user.password_hash) do
+      {:ok, user}
+    else
+      {:error, :invalid_password}
+    end
+  end
   @doc """
   Gets a single user.
 
@@ -124,5 +160,10 @@ defmodule Project01.Users do
     User
     |> where(email: ^email)
     |> Repo.all()
+  end
+
+  def authentication_with_email_and_password(%{email: email, password: password}) do
+    user =  Repo.get_by!(User, %{email: email})
+    Bcrypt.check_pass(user, password)
   end
 end

@@ -16,4 +16,8 @@ defmodule Project01Web.UserView do
       email: user.email,
       role: user.role}
   end
+
+  def render("jwt.json", %{jwt: jwt}) do
+    %{jwt: jwt}
+  end
 end

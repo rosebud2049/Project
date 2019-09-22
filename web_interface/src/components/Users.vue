@@ -101,7 +101,7 @@
               <div class="form-group">
                 <label>Password</label>
                 <input
-                  v-model="user.password"
+                  v-model="user.password_hash"
                   id="modal-password-input"
                   type="password"
                   name="password"
@@ -169,7 +169,7 @@
               <div class="form-group">
                 <label>Password</label>
                 <input
-                  v-model="user.password"
+                  v-model="user.password_hash"
                   id="modal-password-input1"
                   type="password"
                   name="password"
@@ -214,7 +214,7 @@ export default {
       user: {
         username: "",
         email: "",
-        password: "",
+        password_hash: "",
         role: ""
       },
       users: null,
@@ -244,7 +244,7 @@ export default {
           user: {
             username: this.user.username,
             email: this.user.email,
-            password: this.user.password,
+            password_hash: this.user.password_hash,
             role: this.user.role
           }
         })
@@ -288,7 +288,7 @@ export default {
           user: {
             username: this.user.username,
             email: this.user.email,
-            password: this.user.password,
+            password_hash: this.user.password_hash,
             role: this.user.role
           }
         })

@@ -3,8 +3,27 @@ defmodule Project01Web.UserController do
 
   alias Project01.Users
   alias Project01.Users.User
+  alias Project01.Guardian
 
   action_fallback Project01Web.FallbackController
+
+  
+  def create(conn, %{"user" => user_params}) do
+    with {:ok, %User{} = user} <- Users.create_user(user_params),
+    {:ok, token, _claims} <- Guardian.encode_and_sign(user) do
+      conn 
+      |> render("jwt.json", jwt: token)
+    end
+  end
+  
+  def sign_in(conn, %{"email" => email, "password" => password}) do
+    case Users.token_sign_in(email, password) do
+      {:ok, token, _claims} ->
+        conn |> render("jwt.json", jwt: token)
+      _ ->
+        {:error, :unauthorized}
+    end
+  end
   
   def index(conn, %{"username" => username, "email" => email}) do
     users = Users.list_users_by_username_and_by_email(username, email)
@@ -25,15 +44,15 @@ defmodule Project01Web.UserController do
     users = Users.list_users()
     render(conn, "index.json", users: users)
   end
-
-  def create(conn, %{"user" => user_params}) do
-    with {:ok, %User{} = user} <- Users.create_user(user_params) do
-      conn
-      |> put_status(:created)
-      |> put_resp_header("location", Routes.user_path(conn, :show, user))
-      |> render("show.json", user: user)
-    end
-  end
+  
+  #def create(conn, %{"user" => user_params}) do
+  #  with {:ok, %User{} = user} <- Users.create_user(user_params) do
+  #    conn
+  #     |> put_status(:created)
+  #    |> put_resp_header("location", Routes.user_path(conn, :show, user))
+  #    |> render("show.json", user: user)
+  #  end
+  #end
 
 
   def show(conn, %{"id" => id}) do

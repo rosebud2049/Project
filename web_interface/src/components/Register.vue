@@ -33,7 +33,7 @@
             <div class="form-group">
               <label for="exampleInputPassword1">Password</label>
               <input
-                v-model="user.password"
+                v-model="user.password_hash"
                 type="password"
                 class="form-control"
                 id="exampleInputPassword1"
@@ -72,7 +72,7 @@ export default {
       user: {
         username: "",
         email: "",
-        password: "", 
+        password_hash: "", 
         role: ""
       },
       roles: ["admin", "user"]
@@ -85,7 +85,7 @@ export default {
           user: {
             username: this.user.username,
             email: this.user.email,
-            password: this.user.password,
+            password_hash: this.user.password,
             role: this.user.role
           }
         })

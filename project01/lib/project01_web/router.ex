@@ -24,6 +24,8 @@ defmodule Project01Web.Router do
     pipe_through :api
     resources "/users", UserController, except: [:new, :edit]
     options   "/users", UserController, :options
+    post "/users/sign_up", UserController, :create
+    post "/users/sign_in", UserController, :sign_in
 
     post "/workingtimes/:userID", WorkingtimeController, :create
     get "/workingtimes/:userID/:workingtimeID", WorkingtimeController, :show
