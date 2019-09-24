@@ -8,7 +8,6 @@ defmodule Project01.Users.User do
     field :password_hash, :string, size: 100
     field :role, :string
     field :password, :string, virtual: true
-    #field :password_confirmation, :string, virtual: true
     has_many :workingtimes, Project01.Workingtimes.Workingtime
     has_many :clocks, Project01.Clocks.Clock
     
@@ -16,11 +15,10 @@ defmodule Project01.Users.User do
   end
 
   @doc false
-  user
-  def changeset(user, attrs) do
-    |> cast(attrs, [:username, :email, :password_hash, :role])
-    |> validate_required([:username, :email, :password_hash])
-    |> validate_length(:password, min: 8)
+  def changeset(user, attrs \\ %{}) do
+    user
+    |> cast(attrs, [:username, :email, :password, :role])
+    |> validate_required([:email, :password])
     |> validate_confirmation(:password)
     |> unique_constraint(:email)
     |> put_password_hash
@@ -28,8 +26,8 @@ defmodule Project01.Users.User do
 
   defp put_password_hash(changeset) do
     case changeset do
-     %Ecto.Changeset{valid?: true, changes: %{password_hash: pwd}} -> 
-     put_change(changeset, :password_hash, Bcrypt.hash_pwd_salt(pwd))
+     %Ecto.Changeset{valid?: true, changes: %{password: pwd}} -> 
+     put_change(changeset, :password_hash, Base.encode16(:crypto.hash(:sha256, pwd)))
    _ ->
      changeset
     end

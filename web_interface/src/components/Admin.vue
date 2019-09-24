@@ -101,7 +101,7 @@
               <div class="form-group">
                 <label>Password</label>
                 <input
-                  v-model="user.password_hash"
+                  v-model="user.password"
                   id="modal-password-input"
                   type="password"
                   name="password"
@@ -169,7 +169,7 @@
               <div class="form-group">
                 <label>Password</label>
                 <input
-                  v-model="user.password_hash"
+                  v-model="user.password"
                   id="modal-password-input1"
                   type="password"
                   name="password"
@@ -214,7 +214,7 @@ export default {
       user: {
         username: "",
         email: "",
-        password_hash: "",
+        password: "",
         role: ""
       },
       users: null,
@@ -240,11 +240,11 @@ export default {
     },
     createUser: function() {
       axios
-        .post("http://localhost:4001/api/users", {
+        .post("http://localhost:4002/api/users", {
           user: {
             username: this.user.username,
             email: this.user.email,
-            password_hash: this.user.password_hash,
+            password: this.user.password,
             role: this.user.role
           }
         })
@@ -284,11 +284,11 @@ export default {
     },
     updateUser: function() {
       axios
-        .put("http://localhost:4001/api/users/" + this.user.userId, {
+        .put("http://localhost:4002/api/users/" + this.user.userId, {
           user: {
             username: this.user.username,
             email: this.user.email,
-            password_hash: this.user.password_hash,
+            password: this.user.password,
             role: this.user.role
           }
         })
@@ -325,7 +325,7 @@ export default {
     },
     getUsers: function() {
       axios
-        .get("http://localhost:4001/api/users")
+        .get("http://localhost:4002/api/users")
         .then(response => {
           this.users = response.data.data;
           // eslint-disable-next-line
@@ -339,7 +339,7 @@ export default {
     getUser: function() {
       console.log(this.search);
       axios
-        .get("http://localhost:4001/api/users?email=" + this.search)
+        .get("http://localhost:4002/api/users?email=" + this.search)
         .then(response => {
           console.log(response);
           this.users = response.data.data;
@@ -361,7 +361,7 @@ export default {
         if (result.value) {
           Swal.fire("Deleted!", "Your file has been deleted.", "success");
           axios
-            .delete("http://localhost:4001/api/users/" + id)
+            .delete("http://localhost:4002/api/users/" + id)
             .then(response => {
               this.users.splice(this.user.userIdx, 1);
               // eslint-disable-next-line

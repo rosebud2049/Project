@@ -8,7 +8,6 @@ defmodule Project01.Users do
 
   alias Project01.Users.User
   alias Project01.Guardian
-  import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
 
   
   
@@ -19,13 +18,13 @@ defmodule Project01.Users do
   ## Examples
   
   iex> list_users()
-  [%User{}, ...]
+  [%User{}, ...]verify_pass
   
   """
   def token_sign_in(email, password) do
     case email_password_auth(email, password) do
       {:ok, user} ->
-        Guardian.encode_and_sign(user)
+        Guardian.encode_and_sign(List.first(user))
       _ ->
         {:error, :unauthorized}
     end
@@ -36,22 +35,27 @@ defmodule Project01.Users do
   end
   
   defp email_password_auth(email, password) when is_binary(email) and is_binary(password) do
-    with {:ok, user} <- get_by_email(email),
-    do: verify_password(password, user)
+    user = get_by_email!(email)
+      IO.inspect(user)
+      verify_pwd(password,user)
   end
 
-  defp get_by_email(email) when is_binary(email) do
-    case Repo.get_by(User, email: email) do
-    nil ->
-      dummy_checkpw()
-      {:error, "Login error."}
-    user ->
-      {:ok, user}
-    end
-  end
+  #defp get_by_email(email) when is_binary(email) do
+  #  case Repo.get_by(User, email: email) do
+   # nil ->
+    #  hash_pwd_salt()
+     # {:error, "Login error."}
+    #user ->
+     # {:ok, user}username
+    #end
+  #end
 
-  defp verify_password(password, %User{} = user) when is_binary(password) do
-    if checkpw(password, user.password_hash) do
+  defp verify_pwd(password,user) when is_binary(password) do
+    IO.inspect(List.first(user).password_hash)
+    IO.inspect(password)
+    hash = Base.encode16(:crypto.hash(:sha256, password))
+    IO.inspect(hash)
+    if (List.first(user).password_hash == hash) do
       {:ok, user}
     else
       {:error, :invalid_password}
@@ -113,6 +117,12 @@ defmodule Project01.Users do
   query = (from u in User, 
     where: u.username == ^(username_param), 
     select: %User{id: u.id, username: u.username, email: u.email})
+  Repo.all(query)
+ end
+
+ def get_by_email!(email_param) do
+  query = (from u in User,
+    where: u.email == ^(email_param))
   Repo.all(query)
  end
   @doc """

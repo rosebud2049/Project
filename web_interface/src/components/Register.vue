@@ -33,7 +33,7 @@
             <div class="form-group">
               <label for="exampleInputPassword1">Password</label>
               <input
-                v-model="user.password_hash"
+                v-model="user.password"
                 type="password"
                 class="form-control"
                 id="exampleInputPassword1"
@@ -72,7 +72,7 @@ export default {
       user: {
         username: "",
         email: "",
-        password_hash: "", 
+        password: "", 
         role: ""
       },
       roles: ["admin", "user"]
@@ -81,15 +81,18 @@ export default {
   methods: {
     register: function(index) {
       axios
-        .post("http://localhost:4001/api/users", {
+        .post("http://localhost:4002/api/users/sign_up", {
           user: {
             username: this.user.username,
             email: this.user.email,
-            password_hash: this.user.password,
+            password: this.user.password,
             role: this.user.role
           }
         })
         .then(response => {
+          if (response) {
+            this.$router.push('/login')
+          }
           console.log(response.data.data);
           const Toast = Swal.mixin({
             toast: true,

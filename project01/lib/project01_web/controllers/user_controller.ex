@@ -16,8 +16,9 @@ defmodule Project01Web.UserController do
     end
   end
   
-  def sign_in(conn, %{"email" => email, "password" => password}) do
-    case Users.token_sign_in(email, password) do
+  def sign_in(conn, params) do
+    IO.inspect(params)
+    case Users.token_sign_in(params["user"]["email"], params["user"]["password"]) do
       {:ok, token, _claims} ->
         conn |> render("jwt.json", jwt: token)
       _ ->
@@ -55,10 +56,10 @@ defmodule Project01Web.UserController do
   #end
 
 
-  def show(conn, %{"id" => id}) do
-    user = Users.get_user!(id)
-    render(conn, "show.json", user: user)
-  end
+  def show(conn, _params) do
+    user = Guardian.Plug.current_resource(conn)
+    conn |> render("user.json", user: user)
+ end
 
   def update(conn, %{"id" => id, "user" => user_params}) do
     user = Users.get_user!(id)

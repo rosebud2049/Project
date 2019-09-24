@@ -1,6 +1,8 @@
 defmodule Project01Web.Router do
   use Project01Web, :router
 
+  alias Project01.Guardian
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -11,6 +13,10 @@ defmodule Project01Web.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+  end
+
+  pipeline :jwt_authenticated do
+    plug Guardian.AuthPipeline
   end
 
   scope "/", Project01Web do
@@ -36,5 +42,11 @@ defmodule Project01Web.Router do
 
     post "/clocks/:userID", ClockController, :create
     get "/clocks/:userID", ClockController, :show
+  end
+
+  scope "/api", Project01Web do
+    pipe_through [:api, :jwt_authenticated]
+
+    get "/my_user", UserController, :show
   end
 end

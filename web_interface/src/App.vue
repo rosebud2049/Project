@@ -6,12 +6,17 @@
       </router-link>
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-          <router-link to="/login">
+          <router-link to="/login" v-if="!this.$store.state.userIsAuthorized">
             <a href="#" class="nav-link">Login</a>
           </router-link>
         </li>
+         <li class="nav-item">
+          <router-link to="/login" v-if="this.$store.state.userIsAuthorized">
+            <a @click="logout" href="#" class="nav-link">Logout</a>
+          </router-link>
+        </li>
         <li class="nav-item">
-          <router-link to="/register">
+          <router-link to="/register" v-if="!this.$store.state.userIsAuthorized">
             <a href="#" class="nav-link">Register</a>
           </router-link>
         </li>
@@ -21,10 +26,15 @@
       <!-- Sidebar -->
       <nav id="sidebar">
         <ul class="list-unstyled components">
-          <p>Raphaël Palerme</p>
+          <p> {{ 'Raphael Palerme' }} </p>
           <li>
-            <router-link to="/Users">
+            <router-link to="/User">
               <a href="#">User</a>
+            </router-link>
+          </li>
+           <li>
+            <router-link v-if="this.$store.state.isAdmin" to="/Admin">
+              <a v-if="this.$store.state.isAdmin" href="#">Admin</a>
             </router-link>
           </li>
           <li class="active">
@@ -56,9 +66,27 @@
 </template>
 
 <script>
+import store from './store'
+
 export default {
   name: "app",
-  components: {}
+  components: {},
+  data() {
+    return {
+      user: {
+        username: '',
+        email: '',
+      }
+    }
+  },
+  methods: {
+    logout: function() {
+      localStorage.removeItem("jwt")
+      localStorage.removeItem("user")
+      store.commit('setUserIsAdmin', false)
+      store.commit('setUserIsAuthenticated', false)
+    }
+  }
 };
 </script>
 
