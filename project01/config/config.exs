@@ -10,6 +10,11 @@ use Mix.Config
 config :project01,
   ecto_repos: [Project01.Repo]
 
+config :cors_plug,
+  origin: "*",
+  max_age: 86400,
+  methods: ["GET", "POST", "DELETE", "PUT"]
+
 # Configures the endpoint
 config :project01, Project01Web.Endpoint,
   url: [host: "localhost"],

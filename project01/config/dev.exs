@@ -4,7 +4,7 @@ use Mix.Config
 config :project01, Project01.Repo,
   username: "postgres",
   password: "postgres",
-  database: "project01_dev",
+  database: "app_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
@@ -16,7 +16,7 @@ config :project01, Project01.Repo,
 # watchers to your application. For example, we use it
 # with webpack to recompile .js and .css sources.
 config :project01, Project01Web.Endpoint,
-  http: [port: 4000],
+  http: [port: 4001],
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
