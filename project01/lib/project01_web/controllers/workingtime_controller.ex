@@ -26,16 +26,85 @@ defmodule Project01Web.WorkingtimeController do
     end
   end
 
-  def show(conn, %{"userID" => user_id}) do
-    workingtime = Workingtimes.get_workingtime!(user_id)
-    IO.inspect(workingtime)
+  def createClockIn(conn, %{"userID" => user_id}) do
+
+    dt = NaiveDateTime.add(NaiveDateTime.utc_now(), 7200, :second)
+    user = Users.get_user!(user_id)
+
+    ## On vérifie qu'il n'y a pas déjà de clockIn pour ce user
+    check_workingtime = Workingtimes.get_workingtimes_by_same_date!(user_id, dt)
+    IO.inspect(check_workingtime)
+
+    if check_workingtime == nil do
+      my_workingtime = %{"start" => dt, "end" => dt, "user_id" => user_id}
+      IO.inspect(my_workingtime)
+      with {:ok, %Workingtime{} = workingtime} <- Workingtimes.create_workingtime(user ,my_workingtime) do
+        conn
+        |> put_status(:created)
+        |> render("show.json", workingtime: workingtime)
+      end
+
+      else
+        IO.inspect(check_workingtime)
+        conn
+        |> json("Ce user a deja clockIn!")
+    end
+  end
+
+  def updateClockOut(conn, %{"userID" => user_id}) do
+
+    # On récupère la date et l'heure actuelle
+    dt = NaiveDateTime.add(NaiveDateTime.utc_now(), 7200, :second)
+    user = Users.get_user!(user_id)
+
+    IO.inspect(user)
+    ## On recupere le workingTime (clockIn)
+    my_workingtime = Workingtimes.get_workingtimes_by_same_date!(user_id, dt)
+    IO.inspect(my_workingtime)
+
+    if my_workingtime != nil do
+      ## On créé un nouveau workingTime (clockOut)
+      new_workingtime = %{"end" => dt}
+
+      with {:ok, %Workingtime{} = workingtime} <- Workingtimes.update_workingtime(my_workingtime, new_workingtime) do
+        
+        render(conn, "show.json", workingtime: workingtime)
+      end
+
+      else
+        conn
+        |> json("Ce user n'a pas clockIn. ClockOut impossible")
+    end
+  end
+
+  # def show(conn, %{"userID" => user_id}) do
+  #   workingtime = Workingtimes.get_workingtime!(user_id)
+  #   IO.inspect(workingtime)
+  #   render(conn, "show.json", workingtime: workingtime)
+  # end
+
+  def show(conn, %{"userID" => user_id, "workingtimeID" => workingtime_id}) do
+    workingtime = Workingtimes.get_workingtime_by_user_id!(user_id, workingtime_id)
+    IO.inspect(user_id)
     render(conn, "show.json", workingtime: workingtime)
   end
 
+  def show(conn, %{"userID" => user_id}) do
+    workingtimes = Workingtimes.get_workingtimes_by_user_id!(user_id)
+    IO.inspect(workingtimes)
+    render(conn, "index.json", workingtimes: workingtimes)
+  end
+
+
+  def showAll(conn, _params) do
+    workingtimes = Users.get!()
+    render(conn, "index.json", workingtimes: workingtimes)
+  end
+
   def showByUserId(conn, %{"userID" => user_id}) do
-    workingtime = Workingtimes.get_workingtimes_by_user_id!(user_id)
-    IO.inspect(workingtime)
-    render(conn, "show.json", workingtime: workingtime)
+    workingtimes = Workingtimes.get_workingtimes_by_user_id!(user_id)
+    IO.inspect(workingtimes)
+    render(conn, "index.json", workingtimes: workingtimes)
   end
 
   def update(conn, %{"id" => id, "workingtime" => workingtime_params}) do
@@ -47,6 +116,7 @@ defmodule Project01Web.WorkingtimeController do
   end
 
   def delete(conn, %{"id" => id}) do
+    IO.inspect(id)
     workingtime = Workingtimes.get_workingtime!(id)
 
     with {:ok, %Workingtime{}} <- Workingtimes.delete_workingtime(workingtime) do

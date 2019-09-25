@@ -37,6 +37,16 @@ defmodule Project01.Users do
   """
   def get_user!(id), do: Repo.get!(User, id)
 
+  def get_user_by_id!(id_params) do
+    query = (from u in User, 
+      where: u.id == ^(id_params), 
+      select: %User{id: u.id, username: u.username, email: u.email})
+    Repo.one(query)
+  end
+
+  def get_myUsers!(attrs \\ %{}) do
+    IO.inspect(attrs)
+  end
   @doc """
   Creates a user.
 
@@ -73,6 +83,12 @@ defmodule Project01.Users do
     |> Repo.update()
   end
 
+ def get_user_by_name!(username_param, email_param) do
+  query = (from u in User, 
+    where: u.username == ^(username_param), 
+    select: %User{id: u.id, username: u.username, email: u.email})
+  Repo.all(query)
+ end
   @doc """
   Deletes a User.
 
@@ -100,5 +116,23 @@ defmodule Project01.Users do
   """
   def change_user(%User{} = user) do
     User.changeset(user, %{})
+  end
+
+  def list_users_by_username_and_by_email(username, email) do
+    User
+    |> where(username: ^username, email: ^email)
+    |> Repo.all()
+  end
+
+  def list_users_by_username(username) do
+    User
+    |> where(username: ^username)
+    |> Repo.all()
+  end
+
+  def list_users_by_email(email) do
+    User
+    |> where(email: ^email)
+    |> Repo.all()
   end
 end

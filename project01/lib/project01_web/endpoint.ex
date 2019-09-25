@@ -42,5 +42,7 @@ defmodule Project01Web.Endpoint do
     key: "_project01_key",
     signing_salt: "jhk3NYPI"
 
+  plug CORSPlug
+
   plug Project01Web.Router
 end

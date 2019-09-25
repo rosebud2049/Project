@@ -15,4 +15,9 @@ defmodule Project01Web.WorkingtimeView do
       start: workingtime.start,
       end: workingtime.end}
   end
+
+  # def render("param", %{workingtime: workingtime}) do
+  #   conn
+  #   |> json ("error !!")
+  # end
 end

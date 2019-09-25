@@ -5,6 +5,21 @@ defmodule Project01Web.UserController do
   alias Project01.Users.User
 
   action_fallback Project01Web.FallbackController
+  
+  def index(conn, %{"username" => username, "email" => email}) do
+    users = Users.list_users_by_username_and_by_email(username, email)
+    render(conn, "index.json", users: users)
+  end
+
+  def index(conn, %{"username" => username}) do
+    users = Users.list_users_by_username(username)
+    render(conn, "index.json", users: users)
+  end
+
+  def index(conn, %{"email" => email}) do
+    users = Users.list_users_by_email(email)
+    render(conn, "index.json", users: users)
+  end
 
   def index(conn, _params) do
     users = Users.list_users()
@@ -19,6 +34,7 @@ defmodule Project01Web.UserController do
       |> render("show.json", user: user)
     end
   end
+
 
   def show(conn, %{"id" => id}) do
     user = Users.get_user!(id)
@@ -38,6 +54,14 @@ defmodule Project01Web.UserController do
 
     with {:ok, %User{}} <- Users.delete_user(user) do
       send_resp(conn, :no_content, "")
+    end
+  end
+
+  def promote(conn, %{"userID" => user_id, "user" => user_params}) do
+    user = Users.get_user!(user_id)
+
+    with {:ok, %User{} = user} <- Users.update_user(user, user_params) do
+      render(conn, "show.json", user: user)
     end
   end
 end

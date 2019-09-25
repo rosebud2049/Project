@@ -22,16 +22,33 @@ defmodule Project01Web.Router do
   # Other scopes may use custom stacks.
   scope "/api", Project01Web do
     pipe_through :api
-
-    post "/users", UserController, :create
-    get "/users/:id", UserController, :show
-    put "/users/:id", UserController, :update
-    # delete "/users/:id", UserController, :delete
+    resources "/users", UserController, except: [:new, :edit]
+    options   "/users", UserController, :options
 
     post "/workingtimes/:userID", WorkingtimeController, :create
-    get "/workingtimes/:userID", WorkingtimeController, :show
-    # get "/workingtimes/:userID", WorkingtimeController, :showByUserId
-    delete "/workingtimes/:userID", WorkingtimeController, :delete
+    post "/workingtimes/clock_in/:userID", WorkingtimeController, :createClockIn
+    put "/workingtimes/clock_out/:userID", WorkingtimeController, :updateClockOut
 
+    get "/workingtimes/:userID/:workingtimeID", WorkingtimeController, :show
+    get "/workingtimes", WorkingtimeController, :index
+    get "/workingtimes/:userID", WorkingtimeController, :show
+    delete "/workingtimes/:id", WorkingtimeController, :delete
+    put "/workingtimes/:id", WorkingtimeController, :update
+
+    post "/clocks/:userID", ClockController, :create
+    get "/clocks/:userID", ClockController, :show
+
+    #### ----- Gestion des Teams ----- ####
+    post "/teams", TeamController, :create
+    get "/teams/:id", TeamController, :show
+
+    # Ajouter un user dans une team
+    post "/manager/add/:userID/:teamID", LinkController, :addIntoTeam
+    #  Voir tous les users d'une Team via teamID
+    get "/manager/viewUsers/:teamID", LinkController, :viewAllUsersByTeam
+    # Voir les teams d'un user via userID
+    get "/manager/viewTeams/:userID", LinkController, :viewAllTeamsByUser
+    # Promouvoir un user "employee" -> "manager"
+    put "/manager/promote/:userID", UserController, :promote
   end
 end
