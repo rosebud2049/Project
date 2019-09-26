@@ -10,7 +10,7 @@
             <a href="#" class="nav-link">Login</a>
           </router-link>
         </li>
-         <li class="nav-item">
+        <li class="nav-item">
           <router-link to="/login" v-if="this.$store.state.userIsAuthorized">
             <a @click="logout" href="#" class="nav-link">Logout</a>
           </router-link>
@@ -20,19 +20,20 @@
             <a href="#" class="nav-link">Register</a>
           </router-link>
         </li>
+          <Clock class="ml-5"/>
       </ul>
     </nav>
     <div class="wrapper">
       <!-- Sidebar -->
       <nav id="sidebar">
         <ul class="list-unstyled components">
-          <p> {{ 'Raphael Palerme' }} </p>
+          <p v-if="this.$store.state.userIsAuthorized">{{ this.$store.state.user }}</p>
           <li>
             <router-link to="/User">
               <a href="#">User</a>
             </router-link>
           </li>
-           <li>
+          <li>
             <router-link v-if="this.$store.state.isAdmin" to="/Admin">
               <a v-if="this.$store.state.isAdmin" href="#">Admin</a>
             </router-link>
@@ -66,25 +67,30 @@
 </template>
 
 <script>
-import store from './store'
+/* eslint-disable */
+import store from "./store";
+import Clock from "./components/Clock"
 
 export default {
   name: "app",
-  components: {},
+  components: {
+    Clock
+  },
   data() {
     return {
+      childData: "",
       user: {
-        username: '',
-        email: '',
+        username: "",
+        email: ""
       }
-    }
+    };
   },
   methods: {
     logout: function() {
-      localStorage.removeItem("jwt")
-      localStorage.removeItem("user")
-      store.commit('setUserIsAdmin', false)
-      store.commit('setUserIsAuthenticated', false)
+      localStorage.removeItem("jwt");
+      localStorage.removeItem("user");
+      store.commit("setUserIsAdmin", false);
+      store.commit("setUserIsAuthenticated", false);
     }
   }
 };

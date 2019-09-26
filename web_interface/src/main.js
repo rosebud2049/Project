@@ -9,8 +9,8 @@ import Login from './components/Login'
 import Register from './components/Register'
 import Admin from './components/Admin'
 import store from './store'
+import Workingtimes from './components/Workingtimes';
 
-Vue.config.productionTip = false
 
 Vue.use(VueRouter)
 
@@ -68,3 +68,4 @@ new Vue({
   router,
   render: h => h(App),
 }).$mount('#app')
+

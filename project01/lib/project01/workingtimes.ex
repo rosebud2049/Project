@@ -59,6 +59,13 @@ defmodule Project01.Workingtimes do
     Repo.all(query)
   end
 
+  def get_workingtimes_by_same_date!(userID, date_clockOut) do
+    query = (from u in Workingtime,
+                where: u.start == u.end and u.user_id == ^(userID),
+                select: %Workingtime{id: u.id, start: u.start, end: u.end, user_id: u.user_id})    
+    Repo.one(query)
+  end
+
 
   @doc """
   Creates a workingtime.

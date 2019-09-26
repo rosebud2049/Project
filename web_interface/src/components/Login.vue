@@ -44,6 +44,7 @@
 /* eslint-disable */
 
 import axios from "axios";
+import store from "../store"
 
 export default {
   props: [],
@@ -84,6 +85,7 @@ export default {
                 localStorage.setItem("user", JSON.stringify(response.data))
                 this.user.username = response.data.username;
                 this.user.email = response.data.email;
+                store.commit('setUsername', this.user.username)
                 
                 if (localStorage.getItem('jwt') != null) {
                   this.$router.push('/user')

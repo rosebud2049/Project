@@ -34,6 +34,9 @@ defmodule Project01Web.Router do
     post "/users/sign_in", UserController, :sign_in
 
     post "/workingtimes/:userID", WorkingtimeController, :create
+    post "/workingtimes/clock_in/:userID", WorkingtimeController, :createClockIn
+    put "/workingtimes/clock_out/:userID", WorkingtimeController, :updateClockOut
+    
     get "/workingtimes/:userID/:workingtimeID", WorkingtimeController, :show
     get "/workingtimes", WorkingtimeController, :index
     get "/workingtimes/:userID", WorkingtimeController, :show

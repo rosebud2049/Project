@@ -1,11 +1,16 @@
 <template>
   <div id="admin">
-      <p>Hello user !</p>
+    <Workingtimes/>
   </div>
 </template>
 
 <script>
+import Workingtimes from './Workingtimes'
+
 export default {
+  components: {
+    Workingtimes
+  }
 
 }
 </script>
