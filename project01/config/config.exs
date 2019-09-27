@@ -10,6 +10,8 @@ use Mix.Config
 config :project01,
   ecto_repos: [Project01.Repo]
 
+config :phoenix, :json_library, Jason
+
 config :cors_plug,
   origin: "*",
   max_age: 86400,
@@ -29,6 +31,17 @@ config :logger, :console,
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
+
+# Config Swagger
+config :project01, :phoenix_swagger,
+  swagger_files: %{
+    "priv/static/swagger.json" => [
+      router: Project01Web.Router,
+      endpoint: Project01Web.Endpoint
+    ]
+  }
+
+
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

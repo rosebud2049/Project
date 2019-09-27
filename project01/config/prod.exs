@@ -16,6 +16,9 @@ config :project01, Project01Web.Endpoint,
 # Do not print debug messages in production
 config :logger, level: :info
 
+# config :project01, Project01Web.Endpoint,
+#   load_from_system_env: true,
+#   url: [host: "example.com", port: 80]
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key
