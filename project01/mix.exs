@@ -7,7 +7,7 @@ defmodule Project01.MixProject do
       version: "0.1.0",
       elixir: "~> 1.5",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:phoenix, :gettext] ++ Mix.compilers(),
+      compilers: [:phoenix, :gettext, :phoenix_swagger] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps()
@@ -44,7 +44,10 @@ defmodule Project01.MixProject do
       {:jason, "~> 1.0"},
       {:cors_plug, "~> 2.0"},
       {:bcrypt_elixir, "~> 2.0"},
-      {:plug_cowboy, "~> 2.0"}
+      {:plug_cowboy, "~> 2.0"},
+      {:poison, "~> 3.1"},
+      {:phoenix_swagger, git: "https://github.com/xerions/phoenix_swagger.git"}
+      # {:ex_json_schema, "~> 0.5"}
     ]
   end
 

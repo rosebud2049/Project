@@ -1,5 +1,6 @@
 defmodule Project01Web.Router do
   use Project01Web, :router
+  use PhoenixSwagger
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -30,7 +31,7 @@ defmodule Project01Web.Router do
     put "/workingtimes/clock_out/:userID", WorkingtimeController, :updateClockOut
 
     get "/workingtimes/:userID/:workingtimeID", WorkingtimeController, :show
-    # get "/workingtimes", WorkingtimeController, :index
+    # Afficher les workingTimes d'un user pour une période donnée
     get "/workingtimes", WorkingtimeController, :showForPeriod
     delete "/workingtimes/:id", WorkingtimeController, :delete
     put "/workingtimes/:id", WorkingtimeController, :update
@@ -50,7 +51,18 @@ defmodule Project01Web.Router do
     get "/manager/viewTeams/:userID", LinkController, :viewAllTeamsByUser
     # Promouvoir un user "employee" -> "manager"
     put "/manager/promote/:userID", UserController, :promote
-    # Afficher les workingTimes d'un user pour une période donnée
-    get "/manager/viewPeriod/:id", WorkingtimeController, :viewPeriod
+  end
+
+  scope "/api/swagger" do
+    forward "/", PhoenixSwagger.Plug.SwaggerUI, otp_app: :project01, swagger_file: "swagger.json"
+  end
+
+  def swagger_info do
+    %{
+      info: %{
+        version: "1.0",
+        title: "Time Manager"
+      }
+    }
   end
 end

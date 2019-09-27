@@ -1,5 +1,6 @@
 defmodule Project01Web.LinkController do
   use Project01Web, :controller
+  use PhoenixSwagger
 
   alias Project01.Links
   alias Project01.Links.Link
@@ -83,5 +84,35 @@ defmodule Project01Web.LinkController do
     with {:ok, %Link{}} <- Links.delete_link(link) do
       send_resp(conn, :no_content, "")
     end
+  end
+
+  swagger_path :viewAllUsersByTeam do
+    get "/api/manager/viewUsers/{team_id}"
+    summary "View all users in a team"
+    description "View every user in a team with the corresponding id"
+    parameter :team_id, :path, :integer, "Team ID", required: true, example: 2
+    response 200, "OK"
+    response 400, "Error"
+  end
+
+  swagger_path :viewAllTeamsByUser do
+    get "/api/manager/viewTeams/{user_id}"
+    summary "View all teams for a user"
+    description "View each team for a user with the corresponding id"
+    parameter :user_id, :path, :integer, "User ID", required: true, example: 2
+    response 200, "OK"
+    response 400, "Error"
+  end
+
+  swagger_path :addIntoTeam do
+    post "/api/manager/add/{user_id}/{team_id}"
+    summary "Add user in a team"
+    description "Add a new user with the corresping id in a specific team"
+    parameters do
+      user_id :path, :integer, "User ID", required: true, example: 2
+      team_id :path, :integer, "Team ID", required: true, example: 2
+    end
+    response 201, "OK"
+    response 422, "Parameter missing" 
   end
 end
