@@ -1,5 +1,6 @@
 defmodule Project01Web.WorkingtimeController do
   use Project01Web, :controller
+  use PhoenixSwagger
 
   alias Project01.Workingtimes
   alias Project01.Workingtimes.Workingtime
@@ -95,6 +96,11 @@ defmodule Project01Web.WorkingtimeController do
     render(conn, "index.json", workingtimes: workingtimes)
   end
 
+  def showForPeriod(conn, %{"userID" => userID, "start" => p_start, "end" => p_end}) do
+    IO.inspect(userID)
+    workingtimes = Workingtimes.get_workingtimes_by_period_and_userID!(userID, p_start, p_end)
+    render(conn, "index.json", workingtimes: workingtimes)
+  end
 
   def showAll(conn, _params) do
     workingtimes = Users.get!()
@@ -123,4 +129,79 @@ defmodule Project01Web.WorkingtimeController do
       send_resp(conn, :no_content, "")
     end
   end
+
+  swagger_path :show do
+    get "/api/workingtimes/{user_id}/{workingtime_id}"
+    summary "Query for working times"
+    description "Query for working times. This operation display the working times for the corresponding user id and working time id"
+    parameters do
+      user_id :path, :integer, "User ID", required: true, example: 2
+      workingtime_id :path, :integer, "WorkingTimes ID", required: true, example: 2
+    end
+    response 200, "OK"
+  end
+
+  swagger_path :showForPeriod do
+    get "/api/workingtimes?userID={user_id}&start={start_date}&end={end_date}"
+    summary "Get period of a user"
+    description "Get working time of a user with corresponding id and working period"
+    parameters do
+      user_id :path, :integer, "User ID", required: true, example: 2
+      start_date :path, :datetime, "Start Date", required: true, example: "2019-09-11 14:50:12"
+      end_date :path, :datetime, "End Date", required: true, example: "2019-09-11 14:50:12"
+    end
+    response 200, "OK"
+  end
+
+  swagger_path :create do
+    post "/api/workingtimes"
+    summary "Create working time"
+    description "Create a working time for a user give in parameters"
+    parameters do
+      start :query, :datetime, "Start Date", required: true, example: "2019-09-11 14:50:12"
+      end_date :query, :datetime, "End Date", required: true, example: "2019-09-11 14:50:12"
+      user_id :query, :integer, "User ID", required: true, example: 2
+    end
+    response 200, "OK"
+  end
+
+  swagger_path :createClockIn do
+    post "/api/workingtimes/clock_in/{user_id}"
+    summary "Create a clock in"
+    description "Create a working time when a user make a clock in"
+    parameter :user_id, :path, :integer, "User ID", required: true, example: 2
+    response 201, "OK"
+    response 200, "User already clock in "
+    response 404, "Not Found"
+  end
+
+  swagger_path :updateClockOut do
+    put "/api/workingtimes/clock_out/{user_id}"
+    summary "Create a clock out"
+    description "Create a clock out and update an existing working time"
+    parameter :user_id, :path, :integer, "User ID", required: true, example: 2
+    response 200, "OK"
+    response 200, "User already clock out "
+    response 404, "Not Found"
+  end
+
+  swagger_path :update do
+    put "/api/workingtimes/{workingtime_id}"
+    summary "Update working time"
+    description "Update a working time for a working time with the corresponding id"
+    parameter :workingtime_id, :path, :integer, "WorkingTime ID", required: true, example: 2
+    response 200, "OK"
+    response 404, "Not Found"
+  end
+
+  swagger_path :delete do
+    PhoenixSwagger.Path.delete "/api/workingtimes/{workingtime_id}"
+    summary "Delete a working time"
+    description "Delete a working time with the corresponding id"
+    parameter :workingtime_id, :path, :integer, "WorkingTime ID", required: true, example: 2
+    response 204, "No Content - Deleted Successfully"
+    response 500, "User not found"
+  end
+
+  
 end

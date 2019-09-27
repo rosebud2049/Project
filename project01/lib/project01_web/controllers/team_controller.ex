@@ -1,5 +1,6 @@
 defmodule Project01Web.TeamController do
   use Project01Web, :controller
+  use PhoenixSwagger
 
   alias Project01.Teams
   alias Project01.Teams.Team
@@ -39,5 +40,25 @@ defmodule Project01Web.TeamController do
     with {:ok, %Team{}} <- Teams.delete_team(team) do
       send_resp(conn, :no_content, "")
     end
+  end
+
+  swagger_path :create do
+    post "/api/teams"
+    summary "Create a team"
+    description "Creation of a team with a name"
+    parameters do
+      username :name, :string, "Name", example: "Marketing"
+    end
+    response 201, "OK"
+    response 422, "Parameter missing"
+  end
+
+  swagger_path :show do
+    get "/api/teams/{team_id}"
+    summary "Get a team"
+    description "Get the team with the corresponding id"
+    parameter :team_id, :path, :integer, "Team ID", required: true, example: 2
+    response 200, "OK"
+    response 400, "Error"
   end
 end

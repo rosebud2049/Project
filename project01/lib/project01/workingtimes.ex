@@ -66,6 +66,15 @@ defmodule Project01.Workingtimes do
     Repo.one(query)
   end
 
+  def get_workingtimes_by_period_and_userID!(userID, p_start, p_end) do
+    IO.inspect(p_end)
+    query = (from u in Workingtime,
+                where: u.user_id == ^(userID) and u.start >= ^(p_start) and u.end <= ^(p_end),
+                select: %Workingtime{id: u.id, start: u.start, end: u.end})
+
+    IO.inspect(query)    
+    Repo.all(query)
+  end
 
   @doc """
   Creates a workingtime.
