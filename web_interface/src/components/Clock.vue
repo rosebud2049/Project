@@ -3,7 +3,6 @@
     <div class="btn-group" role="group" aria-label="Basic example">
       <button @click="getClockIn" type="button" class="btn btn-secondary">Clock in</button>
       <button @click="getClockOut" type="button" class="btn btn-secondary">Clock out</button>
-      <button @click="getWorkingtime"  type="button" class="btn btn-danger">Create Working time</button>
     </div>
   </div>
 </template>
@@ -12,6 +11,7 @@
 /* eslint-disable */
 
 import axios from "axios";
+import store from "../store"
 
 export default {
   name: "Clock",
@@ -102,6 +102,7 @@ export default {
         let workingtimes = ((date2 - date1) / 3600000)
         this.workingtimes = workingtimes
         console.log(this.workingtimes)
+        store.commit('setWorkingtime', this.workingtimes)
     }
   }
 };

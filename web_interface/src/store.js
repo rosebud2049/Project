@@ -7,7 +7,8 @@ export default new Vuex.Store({
     state: {
         userIsAuthorized: false,
         isAdmin: false,
-        user: ""
+        user: "",
+        workingtime: null
     },
     mutations: {
         setUserIsAuthenticated(state, replacement) {
@@ -18,6 +19,9 @@ export default new Vuex.Store({
         },
         setUsername(state, replacement) {
             state.user = replacement
+        },
+        setWorkingtime(state, replacement) {
+            state.workingtime = replacement
         }
     },
     actions: {
