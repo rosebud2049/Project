@@ -9,6 +9,7 @@ import Login from './components/Login'
 import Register from './components/Register'
 import Admin from './components/Admin'
 import store from './store'
+import Team from './components/Team'
 import Workingtimes from './components/Workingtimes';
 
 
@@ -29,7 +30,8 @@ const routes = [
     name: 'admin',
     component: Admin,
     meta: { requiresAuth: true }
-  }
+  },
+  { path: '/team', component: Team },
 ]
 
 const router = new VueRouter({

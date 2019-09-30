@@ -40,19 +40,6 @@
                 placeholder="Password"
               />
             </div>
-            <label for="exampleInputPassword1">Role</label>
-            <div class="input-group mb-3">
-              <div class="input-group-prepend">
-                <label class="input-group-text" for="inputGroupSelect01">Options</label>
-              </div>
-              <select v-model="user.role" class="custom-select" id="inputGroupSelect01" >
-                <option  
-                  class="custom-select" id="inputGroupSelect01"
-                  v-for="role in roles"
-                  v-bind:key="role.value"
-                >{{ role }}</option>
-              </select>
-            </div>
             <button @click="register()" type="submit" class="btn btn-info btn-block">Sign Up</button>
           </form>
         </div>
@@ -86,7 +73,7 @@ export default {
             username: this.user.username,
             email: this.user.email,
             password: this.user.password,
-            role: this.user.role
+            role: "user"
           }
         })
         .then(response => {

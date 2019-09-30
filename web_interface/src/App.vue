@@ -20,7 +20,7 @@
             <a href="#" class="nav-link">Register</a>
           </router-link>
         </li>
-          <Clock class="ml-5"/>
+        <Clock class="ml-5" v-if="this.$store.state.userIsAuthorized" />
       </ul>
     </nav>
     <div class="wrapper">
@@ -29,31 +29,35 @@
         <ul class="list-unstyled components">
           <p v-if="this.$store.state.userIsAuthorized">{{ this.$store.state.user }}</p>
           <li>
-            <router-link to="/User">
-              <a href="#">User</a>
-            </router-link>
-          </li>
-          <li>
-            <router-link v-if="this.$store.state.isAdmin" to="/Admin">
-              <a v-if="this.$store.state.isAdmin" href="#">Admin</a>
-            </router-link>
-          </li>
-          <li class="active">
             <a
               href="#homeSubmenu"
               data-toggle="collapse"
               aria-expanded="false"
               class="dropdown-toggle"
-            >Home</a>
+            >User</a>
             <ul class="collapse list-unstyled" id="homeSubmenu">
               <li>
-                <a href="#">Home 1</a>
+                <router-link to="/User">Time Manager</router-link>
               </li>
               <li>
-                <a href="#">Home 2</a>
+                <router-link to="/Account">Account</router-link>
+              </li>
+            </ul>
+          </li>
+          <li v-if="this.$store.state.isAdmin">
+            <a
+              href="#homeSubmenu0"
+              data-toggle="collapse"
+              aria-expanded="false"
+              class="dropdown-toggle"
+            >Admin</a>
+            <ul class="collapse list-unstyled" id="homeSubmenu0">
+              <li></li>
+              <li>
+                <router-link to="/Admin">Users Management</router-link>
               </li>
               <li>
-                <a href="#">Home 3</a>
+                <router-link to="/Team">Teams Management</router-link>
               </li>
             </ul>
           </li>
@@ -69,7 +73,7 @@
 <script>
 /* eslint-disable */
 import store from "./store";
-import Clock from "./components/Clock"
+import Clock from "./components/Clock";
 
 export default {
   name: "app",
@@ -149,7 +153,7 @@ a:focus {
 
 #sidebar ul.components {
   padding: 20px 0;
-  border-bottom: 1px solid #47748b;
+  /* border-bottom: 1px solid #47748b; */
 }
 
 #sidebar ul p {
