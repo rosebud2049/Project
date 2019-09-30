@@ -31,7 +31,7 @@ export default {
       sum: [],
       workingtimes: [],
       temp_date: [],
-      id: []
+      id: ""
     };
   },
   mounted() {

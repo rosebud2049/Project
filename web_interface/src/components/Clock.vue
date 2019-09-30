@@ -19,13 +19,16 @@ export default {
     return {
       clockIn: "",
       clockOut: "",
-      workingtimes: ""
+      workingtimes: "",
+      id: ""
     };
   },
   methods: {
     getClockIn: function() {
+      this.id = JSON.parse(localStorage.getItem('user')).id
+
       axios
-        .post("http://localhost:4002/api/workingtimes/clock_in/4")
+        .post("http://localhost:4002/api/workingtimes/clock_in/" + this.id)
         .then(response => {
           console.log(response);
           if (response.data == "Ce user a déjà clockIn!") {
@@ -61,7 +64,7 @@ export default {
     },
     getClockOut: function() {
         axios
-        .put("http://localhost:4002/api/workingtimes/clock_out/4")
+        .put("http://localhost:4002/api/workingtimes/clock_out/" + this.id)
         .then(response => {
           console.log(response);
           if (response.data == "Ce user n'a pas clockIn. ClockOut impossible") {
