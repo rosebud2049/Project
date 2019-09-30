@@ -1,8 +1,13 @@
 <template>
   <div id="workingtime">
     <div class="hello" ref="chartdiv"></div>
-
-    <p>{{ this.$store.state.workingtime }}</p>
+    <div class="row">
+      <div class="col-12 text-center">
+        <button  type="button" class="btn btn-info btn-lg rounded-circle">
+          <i class="fa fa-refresh" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -24,17 +29,21 @@ export default {
       date: [],
       output: [],
       sum: [],
-      temp_date: [],
       workingtimes: [],
-      test: []
+      temp_date: [],
+      id: []
     };
   },
   mounted() {
+    this.id = JSON.parse(localStorage.getItem('user')).id
+
     axios
-      .get("http://localhost:4002/api/workingtimes/4")
+      .get("http://localhost:4002/api/workingtimes/" + this.id)
       .then(response => {
         response = response.data.data;
         this.workingtimes = [];
+        this.sum = [];
+        let data = [];
 
         for (let i = 0; i < response.length; i++) {
           let temp_date = response[i].end.split("T");
@@ -83,44 +92,39 @@ export default {
           this.output[k].value = this.sum[k];
         }
 
-      let data = []
-      for (let l = 0; l < this.output.length; l++) {
-        data.push({ date: this.output[l].date, value: this.output[l].value })
-      }
+        for (let l = 0; l < this.output.length; l++) {
+          data.push({ date: this.output[l].date, value: this.output[l].value });
+        }
+
         let chart = am4core.create(this.$refs.chartdiv, am4charts.XYChart);
-    
+
         chart.paddingRight = 40;
-    
-        
-        /*for (let i = 0; i < data.length; i++) {
-          data.push({ date: new Date(2019, 0, i), name: "name" + i, value: visits });
-        }*/
+
         chart.dateFormatter.inputDateFormat = "YYYY-MM-dd";
-    
+
         chart.data = data;
-    
+
         let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
         dateAxis.renderer.grid.template.location = 0;
-    
+
         let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
         valueAxis.tooltip.disabled = true;
         valueAxis.renderer.minWidth = 35;
         valueAxis.min = 0;
         valueAxis.max = 20;
-    
+
         let series = chart.series.push(new am4charts.ColumnSeries());
         series.dataFields.dateX = "date";
         series.dataFields.valueY = "value";
-    
+
         series.tooltipText = "{valueY.value}";
         chart.cursor = new am4charts.XYCursor();
-    
+
         let scrollbarX = new am4charts.XYChartScrollbar();
         scrollbarX.series.push(series);
         chart.scrollbarX = scrollbarX;
-    
+
         this.chart = chart;
-        console.log(this.output);
       })
       .catch(err => {
         console.log(err);
@@ -132,7 +136,6 @@ export default {
       this.chart.dispose();
     }
   }
-
 };
 </script>
 
